@@ -1,30 +1,75 @@
 (function(){
-	var Browser = function(){
+	window.Browser = new (function(){
+
+		this.browser = {};
+
 		this.initialize = function(){
-			//set name of browser by ducktyping :)
-			if(window.chrome){
-				this.browserName = "Chrome";
-				var indexChrome = navigator.userAgent.indexOf("Chrome");
-				this.browserVersion = navigator.userAgent.substring(indexChrome+7, navigator.userAgent.indexOf(" ",indexChrome));
+			var userAgent = navigator.userAgent;
+			var indexChrome = navigator.userAgent.indexOf("Chrome");
+			var indexSafari = navigator.userAgent.indexOf("Safari");
+			var indexFirefox = navigator.userAgent.indexOf("Firefox");
+			var indexOpera = navigator.userAgent.indexOf("OPR");
+			var indexIE = navigator.userAgent.indexOf("MSIE");
+
+			//chrome
+			if(window.chrome && indexChrome != -1 && indexOpera == -1){
+				this.browser.CHROME = true;
+				this.browser.browserVersion = navigator.userAgent.substring(indexChrome+7, navigator.userAgent.indexOf(" ",indexChrome));
+				this.browser.browserName = "Google Chrome";
 			}
-				
-			if(!!window.opera || navigator.userAgent.indexOf(' OPR/') >= 0){
-				this.browserName = "Opera";
-				var indexOpera = navigator.userAgent.indexOf("OPR");
-				this.browserVersion = navigator.userAgent.substring(indexOpera+4, navigator.userAgent.length);
+			//opera 
+			else if(indexOpera != -1){
+				this.browser.OPERA = true;
+				this.browser.browserVersion = navigator.userAgent.substring(indexOpera+4, navigator.userAgent.length);
+				this.browser.browserName = "Opera";
 			}
-				
-			if(navigator.vendor.toLowerCase().indexOf('apple') != -1)
-				this.browserName = "Safari";
-			if(navigator.userAgent.toLowerCase().indexOf('firefox') > -1)
-				this.browserName = "Firefox";
-			if(navigator.userAgent.toLowerCase().indexOf(".net") != -1)
-				this.browserName = "Internet Explorer";
-			if(typeof this.browserName == "undefined")
-				this.browserName = "Unknown";
+			//firefox
+			else if(indexFirefox != -1){
+				this.browser.FIREFOX = true;
+				this.browser.browserVersion = navigator.userAgent.substring(indexFirefox+8, navigator.userAgent.length); 
+				this.browser.browserName = "Mozilla Firefox";
+			}
+			//safari
+			else if(indexSafari != -1 && navigator.vendor.indexOf("Apple") != -1){
+				this.browser.SAFARI = true;
+				var indexVersion = navigator.userAgent.indexOf("Version");
+				this.browser.browserVersion = navigator.userAgent.substring(indexVersion+8, navigator.userAgent.indexOf(" ",indexVersion)); 
+				this.browser.browserName = "Apple Safari";
+			}
+			//internet explorer
+			else if(navigator.userAgent.indexOf("Trident") != -1){
+				this.browser.IE = true;
+				if(indexIE != -1){
+					var indexSemicolon = navigator.userAgent.indexOf(";", indexIE);
+					this.browser.browserVersion = navigator.userAgent.substring(indexIE+5, indexSemicolon); 
+				}else{
+					this.browser.browserVersion = "11.0";
+				}
+				this.browser.browserName = "Microsoft Internet Explorer";
+			}
+			//set browser properties
+			//this.setBrowserProperties();
+			return this.browser;
 		};
-	};
-	window.browser = new Browser();
-	window.browser.initialize();
-	document.write(window.browser.browserName);
+
+		this.browser.isChrome = function(){
+			return !!this.CHROME;
+		}
+		
+		this.browser.isIE = function(){
+			return !!this.IE;
+		}
+		
+		this.browser.isFirefox = function(){
+			return !!this.FIREFOX;
+		}
+		
+		this.browser.isSafari = function(){
+			return !!this.SAFARI;
+		}
+		
+		this.browser.isOpera = function(){
+			return !!this.OPERA;
+		}
+	})().initialize();
 })();
