@@ -42,30 +42,27 @@
 				var indexRV = navigator.userAgent.indexOf("rv:");
 				this.browser.browserVersion = navigator.userAgent.substring(indexRV+3, navigator.userAgent.indexOf(")", indexTrident));	
 			}
-			//set browser properties
-			this.setBrowserProperties();
 			return this.browser;
 		};
-		this.setBrowserProperties = function(){
-			if(this.browser.CHROME){
-				this.browser.browserName = "Google Chrome";
-			}
-		}
+
 		this.browser.isChrome = function(){
 			return !!this.CHROME;
 		}
+
 		this.browser.isIE = function(){
 			return !!this.IE;
 		}
+
 		this.browser.isFirefox = function(){
 			return !!this.FIREFOX;
 		}
+
 		this.browser.isSafari = function(){
 			return !!this.SAFARI;
 		}
+
 		this.browser.isOpera = function(){
 			return !!this.OPERA;
 		}
 	})().initialize();
-	console.log(Browser.browserVersion);
 })();
