@@ -42,6 +42,12 @@
 				var indexRV = navigator.userAgent.indexOf("rv:");
 				this.browser.browserVersion = navigator.userAgent.substring(indexRV+3, navigator.userAgent.indexOf(")", indexTrident));	
 			}
+
+			//set browser viewport dimentions
+			window.addEventListener("DOMContentLoaded", function(){
+				window.Browser.viewport = window.document.body.getBoundingClientRect();
+			});
+
 			return this.browser;
 		};
 
@@ -65,4 +71,5 @@
 			return !!this.OPERA;
 		}
 	})().initialize();
+	console.log(Browser);
 })();
